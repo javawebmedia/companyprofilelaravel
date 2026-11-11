@@ -1,0 +1,38 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    #
+    # Proteksi file sensitif
+    #
+
+    # Blok file .env dan file tersembunyi lainnya
+    RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+    # Blok file composer
+    RewriteRule ^composer\.(json|lock)$ - [F,L,NC]
+
+    # Blok file konfigurasi umum
+    RewriteRule ^(artisan|phpunit\.xml|server\.php)$ - [F,L,NC]
+
+    #
+    # Pretty URL Laravel
+    #
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+#
+# Proteksi tambahan
+#
+
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^(composer\.(json|lock)|\.env)$">
+    Require all denied
+</FilesMatch>
+
+Options -Indexes
